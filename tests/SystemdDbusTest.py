@@ -13,7 +13,7 @@ class SystemdDbusTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        setup_logging('systemd-dbus')
+        setup_logging('systemd-dbus', warn_on_overwrite=False)
 
     def setUp(self):
         print()
