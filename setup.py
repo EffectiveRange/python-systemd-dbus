@@ -10,5 +10,5 @@ setup(
     packages=['systemd_dbus'],
     package_data={'systemd_dbus': ['py.typed']},
     install_requires=['dbus-python',
-                      'python-context-logger@git+https://@github.com/EffectiveRange/python-context-logger.git@latest']
+                      'python-context-logger@git+https://github.com/EffectiveRange/python-context-logger.git@latest']
 )
