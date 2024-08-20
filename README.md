@@ -1,3 +1,7 @@
+
+[![Test and Release](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/test_and_release.yml/badge.svg)](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/test_and_release.yml)
+[![Coverage badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/EffectiveRange/python-systemd-dbus/python-coverage-comment-action-data/endpoint.json)](https://htmlpreview.github.io/?https://github.com/EffectiveRange/python-systemd-dbus/blob/python-coverage-comment-action-data/htmlcov/index.html)
+
 # python-systemd-dbus
 
 Python dbus interface library for systemd
