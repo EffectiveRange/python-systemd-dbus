@@ -88,7 +88,7 @@ class SystemdDbus(Systemd):
     SYSTEMD_SERVICE_INTERFACE = f'{SYSTEMD_BUS_NAME}.Service'
     DBUS_PROPERTIES_INTERFACE = 'org.freedesktop.DBus.Properties'
 
-    def __init__(self, system_bus: SystemBus = SystemBus()) -> None:
+    def __init__(self, system_bus: SystemBus) -> None:
         self._system_bus = system_bus
 
     def __enter__(self) -> 'SystemdDbus':
