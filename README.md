@@ -1,5 +1,4 @@
-
-[![Test and Release](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/test_and_release.yml/badge.svg)](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/test_and_release.yml)
+[![CI](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/ci.yaml/badge.svg)](https://github.com/EffectiveRange/python-systemd-dbus/actions/workflows/ci.yaml)
 [![Coverage badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/EffectiveRange/python-systemd-dbus/python-coverage-comment-action-data/endpoint.json)](https://htmlpreview.github.io/?https://github.com/EffectiveRange/python-systemd-dbus/blob/python-coverage-comment-action-data/htmlcov/index.html)
 
 # python-systemd-dbus
@@ -80,9 +79,10 @@ Note: `service_name` is automatically appended with `.service` if not provided.
 ### Start/Stop/Restart/Reload services
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 systemd.start_service('service_name')
 systemd.stop_service('service_name')
@@ -93,9 +93,10 @@ systemd.reload_service('service_name')
 ### Enable/Disable service files
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 systemd.enable_service('service_name')
 systemd.disable_service('service_name')
@@ -104,9 +105,10 @@ systemd.disable_service('service_name')
 ### Mask/Unmask service files
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 systemd.mask_service('service_name')
 systemd.unmask_service('service_name')
@@ -115,9 +117,10 @@ systemd.unmask_service('service_name')
 ### Get service state/error code
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 state = systemd.get_active_state('service_name')
 print(state)
@@ -129,9 +132,10 @@ print(error_code)
 ### Get service/service file properties
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 properties = systemd.get_service_properties('service_name')
 for key, value in properties.items():
@@ -145,9 +149,10 @@ for key, value in properties.items():
 ### Reload systemd daemon
 
 ```python
+from dbus import SystemBus
 from systemd_dbus import SystemdDbus
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 
 state = systemd.reload_daemon()
 ```
@@ -171,6 +176,7 @@ Output:
 Example to print status changes for `dhcpcd` service:
 
 ```python
+from dbus import SystemBus
 from typing import Any
 from systemd_dbus import SystemdDbus
 
@@ -182,6 +188,6 @@ def on_property_changed(*args: Any) -> None:
         print(f'State of dhcpcd service changed to {state}')
 
 
-systemd = SystemdDbus()
+systemd = SystemdDbus(SystemBus())
 systemd.add_property_change_handler('/org/freedesktop/systemd1/unit/dhcpcd_2eservice', on_property_changed)
 ```
