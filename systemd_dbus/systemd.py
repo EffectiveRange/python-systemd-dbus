@@ -76,7 +76,7 @@ class Systemd(object):
     def get_service_file_properties(self, service_name: str) -> Any:
         raise NotImplementedError()
 
-    def list_service_names(self, states: Optional[list[str]], patterns: Optional[list[str]]) -> list[str]:
+    def list_service_names(self, states: Optional[list[str]] = None, patterns: Optional[list[str]] = None) -> list[str]:
         raise NotImplementedError()
 
     def reload_daemon(self) -> bool:
