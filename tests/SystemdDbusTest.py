@@ -493,6 +493,59 @@ class SystemdDbusTest(TestCase):
         system_bus.get_object().get_dbus_method.assert_called_with('GetAll', 'org.freedesktop.DBus.Properties')
         system_bus.get_object().get_dbus_method().assert_called_with('org.freedesktop.systemd1.Unit')
 
+    def test_returns_service_names(self):
+        # Given
+        system_bus = MagicMock(spec=dbus.SystemBus)
+        system_bus.get_object().get_dbus_method().return_value = dbus.Array([
+            dbus.Struct([dbus.String('test1.service'), dbus.String('Test1 Service'), dbus.String('active')]),
+            dbus.Struct([dbus.String('test2.service'), dbus.String('Test2 Service'), dbus.String('inactive')]),
+        ], signature='s')
+
+        systemd = SystemdDbus(system_bus)
+
+        # When
+        result = systemd.list_service_names()
+
+        # Then
+        self.assertEqual(['test1.service', 'test2.service'], result)
+        system_bus.get_object().get_dbus_method.assert_called_with('ListUnitsByPatterns',
+                                                                   'org.freedesktop.systemd1.Manager')
+        system_bus.get_object().get_dbus_method().assert_called_with([], [])
+
+    def test_returns_service_names_when_filtered(self):
+        # Given
+        system_bus = MagicMock(spec=dbus.SystemBus)
+        system_bus.get_object().get_dbus_method().return_value = dbus.Array([
+            dbus.Struct([dbus.String('test1.service'), dbus.String('Test1 Service'), dbus.String('active')])
+        ], signature='s')
+
+        systemd = SystemdDbus(system_bus)
+
+        # When
+        result = systemd.list_service_names(['active'], ['test*.service'])
+
+        # Then
+        self.assertEqual(['test1.service'], result)
+        system_bus.get_object().get_dbus_method.assert_called_with('ListUnitsByPatterns',
+                                                                   'org.freedesktop.systemd1.Manager')
+        system_bus.get_object().get_dbus_method().assert_called_with(['active'], ['test*.service'])
+
+    def test_returns_empty_list_when_fails_to_list_units(self):
+        # Given
+        system_bus = MagicMock(spec=dbus.SystemBus)
+        system_bus.get_object().get_dbus_method().side_effect = DBusException('Failure')
+
+        systemd = SystemdDbus(system_bus)
+
+        # When
+        result = systemd.list_service_names()
+
+        # Then
+        self.assertEqual([], result)
+        system_bus.get_object().get_dbus_method.assert_called_with('ListUnitsByPatterns',
+                                                                   'org.freedesktop.systemd1.Manager')
+        system_bus.get_object().get_dbus_method().assert_called_with([], [])
+
     def test_returns_true_when_systemd_daemon_is_reloaded(self):
         # Given
         system_bus = MagicMock(spec=dbus.SystemBus)

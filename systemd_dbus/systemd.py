@@ -76,6 +76,9 @@ class Systemd(object):
     def get_service_file_properties(self, service_name: str) -> Any:
         raise NotImplementedError()
 
+    def list_service_names(self, states: Optional[list[str]], patterns: Optional[list[str]]) -> list[str]:
+        raise NotImplementedError()
+
     def reload_daemon(self) -> bool:
         raise NotImplementedError()
 
@@ -203,6 +206,15 @@ class SystemdDbus(Systemd):
 
     def get_service_file_properties(self, service_name: str) -> Any:
         return self._get_service_properties(service_name, self.SYSTEMD_UNIT_INTERFACE)
+
+    def list_service_names(self, states: Optional[list[str]] = None, patterns: Optional[list[str]] = None) -> list[str]:
+        try:
+            interface = self._get_interface()
+            units = interface.ListUnitsByPatterns(states or [], patterns or [])
+            return [str(unit[0]) for unit in units]
+        except DBusException as error:
+            log.error('Failed to list service names', reason=error)
+            return []
 
     def reload_daemon(self) -> bool:
         method = 'Reload'
