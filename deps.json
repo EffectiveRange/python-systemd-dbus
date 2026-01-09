@@ -1,0 +1,16 @@
+{
+  "deps": [
+    {
+      "name": "dbus",
+      "hostinstall": true
+    },
+    {
+      "name": "libdbus-1-dev",
+      "hostinstall": true
+    },
+    {
+      "name": "libdbus-glib-1-dev",
+      "hostinstall": true
+    }
+  ]
+}
